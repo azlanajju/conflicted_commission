@@ -312,6 +312,9 @@ if (isset($_SESSION['pin_verified'])) {
                 <a href="view_logs.php" class="btn btn-info ms-2">
                     <i class="bi bi-journal-text me-1"></i>View Update Logs
                 </a>
+                <a href="invalid_commissions.php" class="btn btn-danger ms-2">
+                    <i class="bi bi-exclamation-triangle me-1"></i>Fix Invalid Commissions
+                </a>
             </div>
             
             <!-- Edit Modal -->
