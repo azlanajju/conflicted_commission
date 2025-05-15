@@ -37,6 +37,11 @@ class CommissionLogger {
     public function logCommissionUpdate($data) {
         $success = true;
         
+        // Ensure username is set
+        if (!isset($data['updatedBy']) || empty($data['updatedBy'])) {
+            $data['updatedBy'] = self::getCurrentUsername();
+        }
+        
         // Log to database if enabled
         if ($this->logToDatabase) {
             try {
@@ -149,5 +154,23 @@ class CommissionLogger {
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
+    }
+    
+    /**
+     * Get current username from session or return default
+     * 
+     * @param string $default Default username if not found
+     * @return string Username
+     */
+    public static function getCurrentUsername($default = 'Unknown') {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        
+        if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+            return $_SESSION['username'];
+        }
+        
+        return $default;
     }
 } 

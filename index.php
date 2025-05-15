@@ -22,10 +22,12 @@ if (isset($_GET['logout'])) {
 $pinError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify_pin'])) {
     $inputPin = isset($_POST['pin']) ? trim($_POST['pin']) : '';
+    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     
     if ($inputPin === ACCESS_PIN) {
         // PIN is correct, set session
         $_SESSION['pin_verified'] = true;
+        $_SESSION['username'] = $username; // Store username in session
     } else {
         // PIN is incorrect
         $pinError = 'Invalid PIN. Please try again.';
@@ -71,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_commission']) 
             'newChildCommission' => $_POST['childCommission'],
             'oldParentCommission' => $originalData['ParentCommission'],
             'newParentCommission' => $_POST['parentCommission'],
-            'updatedBy' => isset($_SESSION['username']) ? $_SESSION['username'] : 'system',
+            'updatedBy' => CommissionLogger::getCurrentUsername(),
             'ipAddress' => CommissionLogger::getClientIP(),
             'notes' => isset($_POST['update_notes']) ? $_POST['update_notes'] : 'Commission update from conflict report'
         ];
@@ -192,10 +194,18 @@ if (isset($_SESSION['pin_verified'])) {
                             <?php endif; ?>
                             
                             <div class="mb-3">
+                                <label for="username" class="form-label">Your Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your name" required autofocus>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
                                 <label for="pin" class="form-label">Access PIN</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
-                                    <input type="password" class="form-control" id="pin" name="pin" placeholder="Enter PIN" required autofocus>
+                                    <input type="password" class="form-control" id="pin" name="pin" placeholder="Enter PIN" required>
                                 </div>
                             </div>
                             
